@@ -1,5 +1,9 @@
-import Image from "next/image";
+import CategoryList from "./_components/CategoryList";
 
 export default function Home() {
-  return <div>Hello NextJS</div>;
+  return (
+    <div>
+      <CategoryList />
+    </div>
+  );
 }
