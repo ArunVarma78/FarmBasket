@@ -1,14 +1,20 @@
 "use client";
 
+import { CartUpdateContext } from "@/app/_context/CartUpdateContext";
 import GlobalApi from "@/app/_utils/GlobalApi";
 import { Button } from "@/components/ui/button";
+import { useUser } from "@clerk/nextjs";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import { toast } from "sonner";
 
 export default function Product() {
   const params = usePathname();
   const [product, setProduct] = useState();
+  const { user } = useUser();
+
+  const { updateCart, setUpdateCart } = useContext(CartUpdateContext);
 
   useEffect(() => {
     GetInventoryProduct(params.split("/")[2]);
@@ -16,7 +22,6 @@ export default function Product() {
 
   const GetInventoryProduct = (inventoryProductSlug) => {
     GlobalApi.GetProduct(inventoryProductSlug).then((resp) => {
-      console.log(resp.inventory);
       setProduct(resp.inventory);
     });
   };
@@ -28,6 +33,25 @@ export default function Product() {
       </div>
     );
   }
+
+  const addToCartHandler = (product) => {
+    toast("Adding to Cart");
+    const data = {
+      email: user?.primaryEmailAddress?.emailAddress,
+      name: product?.name,
+      description: product?.description,
+      productImage: product?.banner?.url,
+      price: product?.price,
+    };
+
+    GlobalApi.AddToCart(data).then((resp) => {
+      setUpdateCart(!updateCart);
+      toast("Added to Cart");
+    }),
+      (error) => {
+        toast("Error while adding into the cart", error);
+      };
+  };
 
   return (
     <div className="flex flex-col md:flex-row gap-8 p-6">
@@ -49,7 +73,10 @@ export default function Product() {
           <span className="text-xl font-medium text-gray-800">
             &#8377; {product.price}
           </span>
-          <Button className="px-6 py-3 bg-green-600 text-white font-medium rounded-lg hover:bg-green-700 transition-all duration-200 cursor-pointer">
+          <Button
+            className="px-6 py-3 bg-green-600 text-white font-medium rounded-lg hover:bg-green-700 transition-all duration-200 cursor-pointer"
+            onClick={() => addToCartHandler(product)}
+          >
             Add to Cart
           </Button>
         </div>

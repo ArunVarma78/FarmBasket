@@ -1,3 +1,5 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import {
   SignInButton,
@@ -5,12 +7,32 @@ import {
   SignedOut,
   SignedIn,
   UserButton,
+  useUser,
 } from "@clerk/nextjs";
 import { Search, ShoppingCart } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useContext, useEffect, useState } from "react";
+import { CartUpdateContext } from "../_context/CartUpdateContext";
+import GlobalApi from "../_utils/GlobalApi";
 
 export default function Header() {
+  const { user } = useUser();
+  const { updateCart, setUpdateCart } = useContext(CartUpdateContext);
+  const [cart, setCart] = useState(0);
+
+  useEffect(() => {
+    user && GetUserCart();
+  }, [updateCart, user]);
+
+  const GetUserCart = () => {
+    GlobalApi.GetUserCart(user?.primaryEmailAddress.emailAddress).then(
+      (resp) => {
+        setCart(resp?.userCarts);
+      }
+    );
+  };
+
   return (
     <div className="flex justify-between items-center p-5 mb-5">
       <Link href="/" className="flex items-center gap-2">
@@ -46,7 +68,9 @@ export default function Header() {
         <SignedIn>
           <div className="flex gap-2 items-center">
             <ShoppingCart />
-            <label className="p-1 px-2 rounded-full bg-slate-200">12</label>
+            <label className="p-1 px-3 rounded-full bg-slate-200">
+              {cart?.length}
+            </label>
           </div>
           <UserButton />
         </SignedIn>
