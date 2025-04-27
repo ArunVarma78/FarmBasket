@@ -3,11 +3,20 @@
 import { useEffect, useRef, useState } from "react";
 import GlobalApi from "../_utils/GlobalApi";
 import Image from "next/image";
-import { ArrowRightCircle } from "lucide-react";
+import { ArrowLeftCircle, ArrowRightCircle } from "lucide-react";
+import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 
 export default function CategoryList() {
   const listRef = useRef(null);
   const [categoryList, setCategoryList] = useState([]);
+
+  const params = useSearchParams();
+  const [selectedCategory, setSelectedCategory] = useState("all");
+
+  useEffect(() => {
+    setSelectedCategory(params.get("category") || "all");
+  }, [params]);
 
   useEffect(() => {
     getCategoryList();
@@ -23,6 +32,15 @@ export default function CategoryList() {
     });
   };
 
+  const scrollLeftHandler = () => {
+    if (listRef.current) {
+      listRef.current.scrollBy({
+        left: -200,
+        behavior: "smooth",
+      });
+    }
+  };
+
   const scrollRightHandler = () => {
     if (listRef.current) {
       listRef.current.scrollBy({
@@ -33,9 +51,9 @@ export default function CategoryList() {
   };
 
   return (
-    <div className="relative">
+    <div className="relative mb-5">
       <div
-        className="flex justify-center gap-4 overflow-auto scrollbar-hide"
+        className="flex lg:justify-center gap-4 overflow-auto scrollbar-hide"
         style={{
           overflow: "scroll",
           scrollbarWidth: "none",
@@ -45,10 +63,16 @@ export default function CategoryList() {
       >
         {categoryList &&
           categoryList.map((category, index) => (
-            <div
+            <Link
+              href={`?category=` + category.slug}
               key={index}
-              className="flex flex-col items-center gap-2 border p-3 rounded-xl min-w-28 
-              hover:border-primary hover:bg-orange-100 cursor-pointer group"
+              className={`flex flex-col items-center gap-2 border p-3 rounded-xl min-w-28 
+              hover:border-green-600 hover:bg-orange-100 cursor-pointer group
+              ${
+                selectedCategory == category.slug &&
+                "text-green-600 border-green-600 bg-orange-50"
+              }
+              `}
             >
               <Image
                 src={category.icon?.url}
@@ -60,12 +84,17 @@ export default function CategoryList() {
               <h2 className="text-sm font-medium group-hover:text-green-600">
                 {category.name}
               </h2>
-            </div>
+            </Link>
           ))}
       </div>
-      <div></div>
+
+      <ArrowLeftCircle
+        className="lg:hidden absolute -left-10 top-9 bg-green-600 rounded-full text-white h-8 w-8 cursor-pointer"
+        onClick={() => scrollLeftHandler()}
+      />
+
       <ArrowRightCircle
-        className="md:hidden absolute -right-10 top-9 bg-green-600 rounded-full text-white h-8 w-8 cursor-pointer"
+        className="lg:hidden absolute -right-10 top-9 bg-green-600 rounded-full text-white h-8 w-8 cursor-pointer"
         onClick={() => scrollRightHandler()}
       />
     </div>

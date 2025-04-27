@@ -9,7 +9,7 @@ const MASTER_URL = process.env.NEXT_PUBLIC_BACKEND_API_URL;
 
 const GetCategory = async () => {
   const query = gql`
-    query MyQuery {
+    query GetCategory {
       categories(first: 50) {
         id
         name
@@ -25,6 +25,31 @@ const GetCategory = async () => {
   return result;
 };
 
+const GetInventory = async (category) => {
+  const query =
+    gql`
+    query GetInventory {
+      inventories(where: { categories_some: { slug: "` +
+    category +
+    `" } }) {
+        id
+        name
+        slug
+        banner {
+          url
+        }
+        categories {
+          name
+        }
+      }
+    }
+  `;
+
+  const result = await request(MASTER_URL, query);
+  return result;
+};
+
 export default {
   GetCategory,
+  GetInventory,
 };
