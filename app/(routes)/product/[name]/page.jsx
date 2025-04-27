@@ -46,7 +46,9 @@ export default function Product() {
         <p className="text-gray-600 mt-4">{product.description}</p>
 
         <div className="mt-6 flex items-center gap-4">
-          <span className="text-xl font-medium text-gray-800">&#8377; 100</span>
+          <span className="text-xl font-medium text-gray-800">
+            &#8377; {product.price}
+          </span>
           <Button className="px-6 py-3 bg-green-600 text-white font-medium rounded-lg hover:bg-green-700 transition-all duration-200 cursor-pointer">
             Add to Cart
           </Button>

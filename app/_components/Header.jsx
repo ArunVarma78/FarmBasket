@@ -6,7 +6,7 @@ import {
   SignedIn,
   UserButton,
 } from "@clerk/nextjs";
-import { Search } from "lucide-react";
+import { Search, ShoppingCart } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -28,7 +28,7 @@ export default function Header() {
         <Search className="text-gray-500" />
       </div>
 
-      <div className="flex gap-5">
+      <div className="flex gap-5 items-center">
         <SignedOut>
           <SignInButton mode="modal">
             <Button variant="outline" className="cursor-pointer">
@@ -44,6 +44,10 @@ export default function Header() {
         </SignedOut>
 
         <SignedIn>
+          <div className="flex gap-2 items-center">
+            <ShoppingCart />
+            <label className="p-1 px-2 rounded-full bg-slate-200">12</label>
+          </div>
           <UserButton />
         </SignedIn>
       </div>

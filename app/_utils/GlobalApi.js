@@ -59,6 +59,7 @@ const GetProduct = async (productSlug) => {
         id
         name
         description
+        price
         banner {
           url
         }
