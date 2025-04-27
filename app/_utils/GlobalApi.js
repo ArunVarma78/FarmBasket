@@ -49,7 +49,32 @@ const GetInventory = async (category) => {
   return result;
 };
 
+const GetProduct = async (productSlug) => {
+  const query =
+    gql`
+    query GetProduct {
+      inventory(where: { slug: "` +
+    productSlug +
+    `" }) {
+        id
+        name
+        description
+        banner {
+          url
+        }
+        categories {
+          name
+        }
+      }
+    }
+  `;
+
+  const result = await request(MASTER_URL, query);
+  return result;
+};
+
 export default {
   GetCategory,
   GetInventory,
+  GetProduct,
 };

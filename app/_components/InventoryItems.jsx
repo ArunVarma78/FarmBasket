@@ -1,9 +1,11 @@
 import Image from "next/image";
+import Link from "next/link";
 import React from "react";
 
 export default function InventoryItems({ inventory }) {
   return (
-    <div
+    <Link
+      href={`/product/` + inventory?.slug}
       className="p-3 border-2
     hover:border rounded-xl
     hover:border-green-600 cursor-pointer
@@ -20,6 +22,6 @@ export default function InventoryItems({ inventory }) {
       <div className="mt-2">
         <h2 className="font-medium text-lg">{inventory.name}</h2>
       </div>
-    </div>
+    </Link>
   );
 }
