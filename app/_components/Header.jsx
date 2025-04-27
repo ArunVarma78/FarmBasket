@@ -12,10 +12,10 @@ import Link from "next/link";
 
 export default function Header() {
   return (
-    <div className="flex justify-between items-center p-5 bg-white shadow-md">
+    <div className="flex justify-between items-center p-5 mb-5">
       <Link href="/" className="flex items-center gap-2">
         <Image
-          src="/logo.png"
+          src="/header-logo/web-logo.png"
           alt="Farm Basket Logo"
           className="cursor-pointer"
           width={100}
@@ -23,7 +23,7 @@ export default function Header() {
         />
       </Link>
 
-      <div className="flex border p-2 rounded-lg bg-gray-200 w-96">
+      <div className="hidden md:flex border p-2 rounded-lg bg-gray-200 w-96">
         <input type="text" className="bg-transparent w-full outline-none" />
         <Search className="text-gray-500" />
       </div>
@@ -37,7 +37,9 @@ export default function Header() {
           </SignInButton>
 
           <SignUpButton mode="modal">
-            <Button className="cursor-pointer">Sign Up</Button>
+            <Button className="cursor-pointer bg-green-600 hover:bg-green-700">
+              Sign Up
+            </Button>
           </SignUpButton>
         </SignedOut>
 
