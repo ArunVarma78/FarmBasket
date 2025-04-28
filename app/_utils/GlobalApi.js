@@ -6,7 +6,6 @@ const MASTER_URL = process.env.NEXT_PUBLIC_BACKEND_API_URL;
  * Used to Make Get Category API request
  * @returns
  */
-
 const GetCategory = async () => {
   const query = gql`
     query GetCategory {
@@ -21,17 +20,19 @@ const GetCategory = async () => {
     }
   `;
 
-  const result = await request(MASTER_URL, query);
-  return result;
+  try {
+    const result = await request(MASTER_URL, query);
+    return result;
+  } catch (error) {
+    console.error("Error fetching categories:", error);
+    throw error;
+  }
 };
 
 const GetInventory = async (category) => {
-  const query =
-    gql`
+  const query = gql`
     query GetInventory {
-      inventories(where: { categories_some: { slug: "` +
-    category +
-    `" } }) {
+      inventories(where: { categories_some: { slug: "${category}" } }) {
         id
         name
         slug
@@ -45,17 +46,19 @@ const GetInventory = async (category) => {
     }
   `;
 
-  const result = await request(MASTER_URL, query);
-  return result;
+  try {
+    const result = await request(MASTER_URL, query);
+    return result;
+  } catch (error) {
+    console.error("Error fetching inventory:", error);
+    throw error;
+  }
 };
 
 const GetProduct = async (productSlug) => {
-  const query =
-    gql`
+  const query = gql`
     query GetProduct {
-      inventory(where: { slug: "` +
-    productSlug +
-    `" }) {
+      inventory(where: { slug: "${productSlug}" }) {
         id
         name
         description
@@ -70,31 +73,25 @@ const GetProduct = async (productSlug) => {
     }
   `;
 
-  const result = await request(MASTER_URL, query);
-  return result;
+  try {
+    const result = await request(MASTER_URL, query);
+    return result;
+  } catch (error) {
+    console.error("Error fetching product:", error);
+    throw error;
+  }
 };
 
 const AddToCart = async (data) => {
-  const query =
-    gql`
+  const query = gql`
     mutation AddToCart {
       createUserCart(
         data: {
-          email: "` +
-    data.email +
-    `"
-          productName: "` +
-    data.name +
-    `"
-          price: ` +
-    data.price +
-    `,
-          productImage: "` +
-    data.productImage +
-    `"
-          productDescription: "` +
-    data.description +
-    `"
+          email: "${data.email}"
+          productName: "${data.productName}"
+          price: ${data.price}
+          productImage: "${data.productImage}"
+          productDescription: "${data.productDescription}"
         }
       ) {
         id
@@ -105,17 +102,19 @@ const AddToCart = async (data) => {
     }
   `;
 
-  const result = await request(MASTER_URL, query);
-  return result;
+  try {
+    const result = await request(MASTER_URL, query);
+    return result;
+  } catch (error) {
+    console.error("Error adding to cart:", error);
+    throw error;
+  }
 };
 
 const GetUserCart = async (userEmail) => {
-  const query =
-    gql`
+  const query = gql`
     query GetUserCart {
-      userCarts(where: { email: "` +
-    userEmail +
-    `" }, first: 50) {
+      userCarts(where: { email: "${userEmail}" }, first: 50) {
         id
         price
         productDescription
@@ -125,8 +124,13 @@ const GetUserCart = async (userEmail) => {
     }
   `;
 
-  const result = await request(MASTER_URL, query);
-  return result;
+  try {
+    const result = await request(MASTER_URL, query);
+    return result;
+  } catch (error) {
+    console.error("Error fetching user cart:", error);
+    throw error;
+  }
 };
 
 export default {

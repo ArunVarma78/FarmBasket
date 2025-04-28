@@ -44,8 +44,8 @@ export default function Product() {
 
     const data = {
       email: user?.primaryEmailAddress?.emailAddress,
-      name: product?.name,
-      description: product?.description,
+      productName: product?.name,
+      productDescription: product?.description,
       productImage: product?.banner?.url,
       price: product?.price,
     };
@@ -59,6 +59,7 @@ export default function Product() {
       .catch((error) => {
         toast.error("Error while adding into the cart");
       });
+    console.log(cart);
   };
 
   return (
