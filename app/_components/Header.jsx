@@ -2,6 +2,11 @@
 
 import { Button } from "@/components/ui/button";
 import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import {
   SignInButton,
   SignUpButton,
   SignedOut,
@@ -12,23 +17,25 @@ import {
 import { Search, ShoppingCart } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useContext, useEffect, useState } from "react";
-import { CartUpdateContext } from "../_context/CartUpdateContext";
+import { useContext, useEffect } from "react";
+import { CartContext } from "../_context/CartContext";
 import GlobalApi from "../_utils/GlobalApi";
+import Cart from "./Cart";
 
 export default function Header() {
   const { user } = useUser();
-  const { updateCart, setUpdateCart } = useContext(CartUpdateContext);
-  const [cart, setCart] = useState(0);
+  const { cart, setCart } = useContext(CartContext);
 
   useEffect(() => {
-    user && GetUserCart();
-  }, [updateCart, user]);
+    if (user) {
+      GetUserCart();
+    }
+  }, [user]);
 
   const GetUserCart = () => {
     GlobalApi.GetUserCart(user?.primaryEmailAddress.emailAddress).then(
       (resp) => {
-        setCart(resp?.userCarts);
+        setCart(resp?.userCarts || []);
       }
     );
   };
@@ -46,7 +53,11 @@ export default function Header() {
       </Link>
 
       <div className="hidden md:flex border p-2 rounded-lg bg-gray-200 w-96">
-        <input type="text" className="bg-transparent w-full outline-none" />
+        <input
+          type="text"
+          className="bg-transparent w-full outline-none"
+          placeholder="Search for products..."
+        />
         <Search className="text-gray-500" />
       </div>
 
@@ -66,12 +77,21 @@ export default function Header() {
         </SignedOut>
 
         <SignedIn>
-          <div className="flex gap-2 items-center">
-            <ShoppingCart />
-            <label className="p-1 px-3 rounded-full bg-slate-200">
-              {cart?.length}
-            </label>
-          </div>
+          <Popover>
+            <PopoverTrigger asChild>
+              <div className="flex gap-2 items-center cursor-pointer">
+                <ShoppingCart />
+                <label className="p-1 px-3 rounded-full bg-slate-200">
+                  {cart?.length || 0}
+                </label>
+              </div>
+            </PopoverTrigger>
+
+            <PopoverContent className="w-80 max-h-[450px] overflow-y-auto custom-scroll">
+              <Cart cart={cart} />
+            </PopoverContent>
+          </Popover>
+
           <UserButton />
         </SignedIn>
       </div>

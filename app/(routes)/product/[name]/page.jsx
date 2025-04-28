@@ -1,6 +1,6 @@
 "use client";
 
-import { CartUpdateContext } from "@/app/_context/CartUpdateContext";
+import { CartContext } from "@/app/_context/CartContext";
 import GlobalApi from "@/app/_utils/GlobalApi";
 import { Button } from "@/components/ui/button";
 import { useUser } from "@clerk/nextjs";
@@ -14,7 +14,7 @@ export default function Product() {
   const [product, setProduct] = useState();
   const { user } = useUser();
 
-  const { updateCart, setUpdateCart } = useContext(CartUpdateContext);
+  const { cart, setCart } = useContext(CartContext);
 
   useEffect(() => {
     GetInventoryProduct(params.split("/")[2]);
@@ -35,7 +35,13 @@ export default function Product() {
   }
 
   const addToCartHandler = (product) => {
-    toast("Adding to Cart");
+    if (!user) {
+      toast.error("Please login to add items to cart.");
+      return;
+    }
+
+    toast("Adding to Cart...");
+
     const data = {
       email: user?.primaryEmailAddress?.emailAddress,
       name: product?.name,
@@ -44,13 +50,15 @@ export default function Product() {
       price: product?.price,
     };
 
-    GlobalApi.AddToCart(data).then((resp) => {
-      setUpdateCart(!updateCart);
-      toast("Added to Cart");
-    }),
-      (error) => {
-        toast("Error while adding into the cart", error);
-      };
+    GlobalApi.AddToCart(data)
+      .then((resp) => {
+        toast.success("Added to Cart");
+
+        setCart((prevCart) => [...prevCart, data]);
+      })
+      .catch((error) => {
+        toast.error("Error while adding into the cart");
+      });
   };
 
   return (

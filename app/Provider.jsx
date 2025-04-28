@@ -2,18 +2,19 @@
 
 import { Toaster } from "sonner";
 import Header from "./_components/Header";
-import { CartUpdateContext } from "./_context/CartUpdateContext";
+import { CartContext } from "./_context/CartContext";
 import { useState } from "react";
 
 export default function Provider({ children }) {
-  const [updateCart, setUpdateCart] = useState(false);
+  const [cart, setCart] = useState([]);
+
   return (
-    <CartUpdateContext.Provider value={{ updateCart, setUpdateCart }}>
+    <CartContext.Provider value={{ cart, setCart }}>
       <div className="px-10 md:px-20 relative">
         <Header />
         <Toaster />
         {children}
       </div>
-    </CartUpdateContext.Provider>
+    </CartContext.Provider>
   );
 }

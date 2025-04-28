@@ -1,4 +1,4 @@
 "use client";
 import { createContext } from "react";
 
-export const CartUpdateContext = createContext(null);
+export const CartContext = createContext();
