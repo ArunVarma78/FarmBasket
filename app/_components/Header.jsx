@@ -52,7 +52,7 @@ export default function Header() {
         />
       </Link>
 
-      <div className="hidden md:flex border p-2 rounded-lg bg-gray-200 w-96">
+      <div className="hidden md:flex border p-2 rounded-lg bg-gray-100 w-96">
         <input
           type="text"
           className="bg-transparent w-full outline-none"

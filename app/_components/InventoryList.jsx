@@ -19,6 +19,10 @@ export default function InventoryList() {
     });
   };
 
+  if (inventoryList.length == 0) {
+    return <p>Oops! Nothing here at the moment</p>;
+  }
+
   return (
     <div
       className="mb-10
@@ -28,13 +32,9 @@ export default function InventoryList() {
     lg:grid-cols-4
     gap-7 mt-3"
     >
-      {inventoryList.length ? (
-        inventoryList.map((inventories, index) => (
-          <InventoryItems key={index} inventory={inventories} />
-        ))
-      ) : (
-        <p>Oops! Nothing here at the moment</p>
-      )}
+      {inventoryList.map((inventories, index) => (
+        <InventoryItems key={index} inventory={inventories} />
+      ))}
     </div>
   );
 }

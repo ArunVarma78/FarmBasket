@@ -5,6 +5,7 @@ import GlobalApi from "../_utils/GlobalApi";
 import { toast } from "sonner";
 import { useContext } from "react";
 import { CartContext } from "../_context/CartContext";
+import Link from "next/link";
 
 export default function Cart() {
   const { cart, setCart } = useContext(CartContext);
@@ -67,9 +68,11 @@ export default function Cart() {
         </div>
       ))}
 
-      <Button className="cursor-pointer bg-green-600 hover:bg-green-700 w-full mt-4">
-        Checkout &#8377; {CalculateCartAmount()}
-      </Button>
+      <Link href={`/checkout`}>
+        <Button className="cursor-pointer bg-green-600 hover:bg-green-700 w-full mt-4">
+          Checkout &#8377; {CalculateCartAmount()}
+        </Button>
+      </Link>
     </div>
   );
 }
