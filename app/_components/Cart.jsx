@@ -1,8 +1,14 @@
 import { Button } from "@/components/ui/button";
 import { X } from "lucide-react";
 import Image from "next/image";
+import GlobalApi from "../_utils/GlobalApi";
+import { toast } from "sonner";
+import { useContext } from "react";
+import { CartContext } from "../_context/CartContext";
 
-export default function Cart({ cart }) {
+export default function Cart() {
+  const { cart, setCart } = useContext(CartContext);
+
   if (!cart || cart.length === 0) {
     return (
       <div className="text-center text-gray-500 p-5">
@@ -17,6 +23,18 @@ export default function Cart({ cart }) {
       total = total + product.price;
     });
     return total.toFixed(2);
+  };
+
+  const DeleteCartProduct = (id) => {
+    toast("Removing from Cart...");
+    GlobalApi.DeleteCartProduct(id)
+      .then((resp) => {
+        toast("Product Removed!");
+        setCart((prevCart) => prevCart.filter((item) => item.id !== id));
+      })
+      .catch((error) => {
+        toast.error("Error while removing from the cart");
+      });
   };
 
   return (
@@ -41,7 +59,10 @@ export default function Cart({ cart }) {
 
           <div className="flex items-center gap-2">
             <h2 className="font-medium">&#8377; {product?.price}</h2>
-            <X className="h-4 w-4 text-red-500 cursor-pointer hover:scale-125" />
+            <X
+              onClick={() => DeleteCartProduct(product.id)}
+              className="h-4 w-4 text-red-500 cursor-pointer hover:scale-125"
+            />
           </div>
         </div>
       ))}

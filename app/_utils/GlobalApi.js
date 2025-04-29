@@ -133,10 +133,29 @@ const GetUserCart = async (userEmail) => {
   }
 };
 
+const DeleteCartProduct = async (id) => {
+  const query = gql`
+    mutation DeleteCartProduct {
+      deleteUserCart(where: { id: "${id}" }) {
+        id
+      }
+    }
+  `;
+
+  try {
+    const result = await request(MASTER_URL, query);
+    return result;
+  } catch (error) {
+    console.error("Error deleting cart product:", error);
+    throw error;
+  }
+};
+
 export default {
   GetCategory,
   GetInventory,
   GetProduct,
   AddToCart,
   GetUserCart,
+  DeleteCartProduct,
 };

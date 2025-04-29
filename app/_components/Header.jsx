@@ -88,7 +88,7 @@ export default function Header() {
             </PopoverTrigger>
 
             <PopoverContent className="w-80 max-h-[450px] overflow-y-auto custom-scroll">
-              <Cart cart={cart} />
+              <Cart />
             </PopoverContent>
           </Popover>
 

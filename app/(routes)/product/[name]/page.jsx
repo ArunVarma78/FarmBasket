@@ -54,12 +54,14 @@ export default function Product() {
       .then((resp) => {
         toast.success("Added to Cart");
 
-        setCart((prevCart) => [...prevCart, data]);
+        setCart((prevCart) => [
+          ...prevCart,
+          { ...data, id: resp?.createUserCart?.id },
+        ]);
       })
       .catch((error) => {
         toast.error("Error while adding into the cart");
       });
-    console.log(cart);
   };
 
   return (
