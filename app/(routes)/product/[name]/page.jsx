@@ -82,7 +82,7 @@ export default function Product() {
 
         <div className="mt-6 flex items-center gap-4">
           <span className="text-xl font-medium text-gray-800">
-            &#8377; {product.price}
+            &#8377; {product.price}/kg
           </span>
           <Button
             className="px-6 py-3 bg-green-600 text-white font-medium rounded-lg hover:bg-green-700 transition-all duration-200 cursor-pointer"
